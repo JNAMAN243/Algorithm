@@ -1,126 +1,74 @@
-#include <iostream>
-#include <limits.h>
-#include <cstring>
+#include<iostream>
+#include<bits/stdc++.h>
+#include<string>
 using namespace std;
 
+int max(int a, int b);
 
-char **B;
+int lcs( string &X, string &Y, int m, int n )
+{
+	int L[m + 1][n + 1];
+	
+	for (int i = 0; i <= m; i++)
+	{
+		for (int j = 0; j <= n; j++)
+		{
+		if (i == 0 || j == 0)
+			L[i][j] = 0;
+	
+		else if (X[i - 1] == Y[j - 1])
+			L[i][j] = L[i - 1][j - 1] + 1;
+	
+		else
+			L[i][j] = max(L[i - 1][j], L[i][j - 1]);
+		}
+	}
+	//printing LCS
+	string tmp;
+	int i = m,j = n;
+	while(i!=0&&j!=0){
+		if(L[i][j]==L[i][j-1])
+		    j--;
+		else if(L[i][j]==L[i-1][j])
+		    i--;
+		else{
+		    tmp+=Y[j-1];
+		    i--;
+		    j--;
+			}
+	}
+	reverse(tmp.begin(),tmp.end());
+	cout<<"\n\nLCS is : "<<tmp<<"\n\n";
+    
+	return L[m][n];
+}
 
-int LCS(char*, char*);
-void print_LCS(char*,char**,int,int);
+
+int max(int a, int b)
+{
+	return (a > b)? a : b;
+}
+
 
 int main()
-{
-    cout<<"\n--------------------- LONGEST COMMON SUBSEQUENCE --------------------\n";
-    char* str1=new char[100];
-    char* str2=new char[100];
-    cout<<"\nEnter str1 : ";
-    cin>>str1;
-    cout<<"\nEnter str2 : ";
-    cin>>str2;
-    int Result = LCS(str1,str2);
-    cout<<"\nLongest common subsequence is of length: "<<Result;
-    cout<<"\n\n--------------------------------------------------------------------\n";
-
-
-    return 0;
+{   int ext;
+	string st1 ;
+	string st2 ;
+  begin:
+	cout<<"Enter the first sequence : ";
+	cin>>st1;
+	cout<<"Enter the Second sequence : ";
+	cin>>st2;
+	int lm = st1.length();
+	int ln = st2.length();
+	
+	cout << "Length of LCS is "
+		<< lcs( st1, st2, lm, ln );
+	
+	cout<<"\n\nPress 1 to start again / any other key to exit : ";
+  	cin>>ext;
+  	if(ext == 1)
+     	goto begin;
+	return 0;
 }
 
-void print_LCS(char* str1, char** B,int i ,int j)
-{
-    if(i==0 || j==0)
-    {
-        return;
-    }
-    if(B[i][j]=='!')
-    {
-        print_LCS(str1,B,i-1,j-1);
-        cout<<str1[i-1];
-    }
-
-
-    else if(B[i][j]=='^')
-    {
-        print_LCS(str1,B,i-1,j);
-    }
-    else
-    {
-        print_LCS(str1,B,i,j-1);
-    }
-}
-
-int LCS(char* str1, char* str2)
-{
-    int n= strlen(str1);
-    int m= strlen(str2);
-
-    int i,j;
-    B=new char*[n+1];
-    for(i=0; i<=n; i++)
-    {
-        B[i]=new char[m+1];
-    }
-
-
-
-    for(i=0; i<=n; i++)
-    {
-        B[i][0]=' ';
-    }
-    for(i=0; i<=m; i++)
-    {
-        B[0][i]=' ';
-    }
-
-
-    int **C=new int*[n+1];
-    for(i=0; i<=n; i++)
-    {
-        C[i]=new int[m+1];
-    }
-
-
-    for(i=0; i<=n; i++)
-    {
-        C[i][0]=0;
-    }
-    for(i=0; i<=m; i++)
-    {
-        C[0][i]=0;
-    }
-
-    for(i=1; i<=n; i++)
-    {
-        for(j=1; j<=m; j++)
-        {
-
-            if(str1[i-1]==str2[j-1])
-            {
-                C[i][j]=C[i-1][j-1]+1;
-                B[i][j]='!';
-            }
-            else
-            {
-                if(C[i-1][j]>=C[i][j-1])
-                {
-                    C[i][j]=C[i-1][j];
-                    B[i][j]='^';
-                }
-                else
-                {
-                    C[i][j]=C[i][j-1];
-                    B[i][j]='<';
-                }
-            }
-        }
-    }
-
-
-
-
-    cout<<"\nLCS is : ";
-    print_LCS(str1,B,n,m);
-    cout<<endl;
-
-    return C[n][m];
-}
