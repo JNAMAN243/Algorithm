@@ -1,37 +1,61 @@
-#include<iostream>
+#include <bits/stdc++.h>
 using namespace std;
-int main()
+
+int insertionSort(int arr[], int n)
 {
-	int n,t,j,ct=0;
-	cout<<"\nEnter the size of array: ";
-	cin>>n;
-	int ar[n];
-	cout<<"\nEnter elements in an array: ";
-	for(int i=0;i<n;i++)
+	int i, key, j,count;
+	for (i = 1; i < n; i++)
 	{
-		cin>>ar[i];
-	}
-	cout<<"\nElements are: ";
-		for(int i=0;i<n;i++)
-	{
-		cout<<ar[i]<<" ";
-	}
-	for(int i=1;i<n;i++)
-	{
-		t=ar[i];
-		for(j=i-1;j>=0&&t<ar[j];j--)
-		{
-			ar[j+1]=ar[j];
-			ct++;
+		key = arr[i];
+		j = i - 1;
+
+		while (j >= 0 )
+		{if(arr[j] > key){
+			arr[j + 1] = arr[j];
+			j = j - 1;
+			count++;}
+			else{
+				count++;
+				break;
+			}
 		}
-		
-    	ar[j+1]=t;
+		arr[j + 1] = key;
 	}
-	cout<<"\nSorted array is:";
-	for(int i=0;i<n;i++)
+	return count;
+}
+
+void printArray(int arr[], int n)
+{
+	int i;
+	for (i = 0; i < n; i++)
+		cout << arr[i] << " ";
+	cout << endl;
+}
+
+
+int main()
+{ 	int size,comp,ext;
+  begin:
+	cout<<"Enter the size of array : ";
+	cin>>size;
+	int arr[size];
+	cout<<"\n\n";
+	for(int i=0;i<size;i++)
 	{
-		cout<<" "<<ar[i];
+		cout<<"Enter element "<<i+1<<" in an array : ";
+		cin>>arr[i];
 	}
-	cout<<"\nNo of Comparisions : "<<ct;
+	
+    cout << "\n\nGiven array is :    ";
+	printArray(arr, size);
+	comp = insertionSort(arr, size);
+	cout<<"\n\nSorted array is:   ";
+	printArray(arr, size);
+	cout<<"\nNo of comparisons are :  "<<comp;
+	cout<<"\n\nPress 1 to start again / any other key to exit : ";
+  	cin>>ext;
+  	if(ext == 1)
+     	goto begin;
+	return 0;
 }
 
